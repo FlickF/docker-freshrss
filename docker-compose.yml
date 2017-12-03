@@ -1,0 +1,26 @@
+version: '2'
+
+volumes:
+  db:
+
+services:
+  freshrss:
+    container_name: freshrss
+    image: linuxserver/freshrss
+    volumes:
+      - ./data:/config
+    ports:
+       - "80:80"
+       - "443:443"
+    links:
+      - db:db
+    restart: unless-stopped
+  db:
+    container_name: freshrss_database
+    image: mariadb
+    environment:
+      MYSQL_ROOT_PASSWORD: "rootpw"
+      MYSQL_DATABASE: "freshrss"
+    volumes:
+      - db:/var/lib/mysql
+    restart: unless-stopped
